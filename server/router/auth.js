@@ -1,6 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const axios = require('axios');
+const requestIp = require('request-ip');
 const User = require("../model/userSchema");
+
+
+// const getClientIP = (req) => {
+//     return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+// };
 
 router.post("/api/user", async (req, res) => {
     const { name, age, gender, phone, email } = req.body;
@@ -8,33 +15,75 @@ router.post("/api/user", async (req, res) => {
         return res.status(422).json({ error: "Fill all the fields" });
     }
     try {
-        // let clientIp = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-        // if (clientIp === "::1") {
-        //   clientIp = "127.0.0.1";
-        // }
+        const clientIp = requestIp.getClientIp(req);
+        console.log("ip: ", clientIp)
 
-        // const response = await axios.post(process.env.WEBHOOK_URL, {
-        //   ip: clientIp
-        // });
+        const ipApiUrl = `https://ipapi.co/${clientIp}/json/`;
+
+        const locationResponse = await axios.get(ipApiUrl);
+
+        const { city, region, country_name: country } = locationResponse.data;
+
+        const geoResponse = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
+            params: {
+                q: `${city},${region},${country}`,
+                limit: 1,
+                appid: process.env.WEATHER_API_KEY
+            }
+        });
+
+        if (!geoResponse.data.length) {
+            return res.status(400).json({ msg: 'Unable to fetch location data.' });
+        }
+
+        const location = geoResponse.data[0];
+        const latitude = location.lat;
+        const longitude = location.lon;
+
+        const weatherResponse = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
+            params: {
+                lat: latitude,
+                lon: longitude,
+                units: 'metric',
+                appid: process.env.WEATHER_API_KEY
+            }
+        });
+
+        const weatherData = weatherResponse.data;
+        const temperature = weatherData.main.temp;
+        const condition = weatherData.weather[0].description;
 
         const address = {
-            city: "Patna",
-            region: "Bihar",
-            country: "India",
-            latitude: 456789,
-            longitude: 456789,
+            city,
+            region,
+            country,
+            latitude,
+            longitude
         };
 
         const weather = {
-            temperature: 37,
-            condition: "Sunny",
+            temperature,
+            condition
         };
+
+        // const address = {
+        //     city: "Patna",
+        //     region: "Bihar",
+        //     country: "India",
+        //     latitude: 456789,
+        //     longitude: 456789,
+        // };
+
+        // const weather = {
+        //     temperature: 37,
+        //     condition: "Sunny",
+        // };
 
         const user = new User({ name, age, gender, phone, email, address, weather });
         const userRegistered = await user.save();
 
         if (userRegistered) {
-        return res.status(201).json({ message: "User registered successfully" });
+            return res.status(201).json({ message: "User registered successfully" });
         }
     } catch (error) {
         console.log("/adduser: ", error);
@@ -56,7 +105,7 @@ router.put('/api/user/:id', async (req, res) => {
             email: email
         }, { new: true });
 
-        if(user){
+        if (user) {
             return res.status(201).json({ message: "Successfully updated" });
         }
     } catch (error) {
