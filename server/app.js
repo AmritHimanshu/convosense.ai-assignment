@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const app = express();
+const path = require('path');
 
 dotenv.config({ path: './.env' });
 
@@ -15,11 +16,13 @@ app.use(cors({
 
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(require('./router/auth'));
 
-app.get('/', (req, res) => {
-    res.json({ message: "I am from app.js" });
-})
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running at port ${PORT}`);
