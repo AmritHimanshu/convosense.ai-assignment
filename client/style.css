@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: rgb(251, 251, 251);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 50px;
+}
+
+/* Form */
+
+#USER_INPUT_FORM {
+  background-color: white;
+  border-radius: 5px;
+  padding: 20px;
+  width: 400px;
+  box-shadow: 5px 5px 15px -5px gray;
+}
+
+#USER_INPUT_FORM > div {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#USER_INPUT_FORM > div > label {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+input {
+  padding: 5px;
+  outline: 0;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+input::placeholder {
+  color: rgb(134, 134, 134);
+  font-size: 12px;
+}
+
+select {
+  border: 1px solid black;
+  border-radius: 4px;
+  background-color: white;
+  padding: 5px;
+  outline: 0;
+}
+
+.FORM_BUTTON {
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.BTN {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.FORM_BUTTON:hover,
+.BTN_EDIT:hover {
+  background-color: #45a049;
+}
+
+/* Table */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: center;
+}
+
+thead th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+tbody td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.BTN_DELETE {
+  background-color: red;
+}
+
+.BTN_DELETE:hover{
+    background-color: rgb(235, 0, 0);
+}
+
+#TABLE {
+  margin-top: 100px;
+}
