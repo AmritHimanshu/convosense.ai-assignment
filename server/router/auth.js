@@ -35,7 +35,7 @@ router.post("/api/user", async (req, res) => {
         const ipDetails = await getIPDetails(ip);
         console.log(ipDetails);
 
-        return res.status(201).json({ ipDetails });
+        return res.status(201).json( ipDetails );
 
         // const { city, region, country_name: country } = ipDetails;
 
