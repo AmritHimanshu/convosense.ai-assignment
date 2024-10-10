@@ -37,15 +37,17 @@ router.post("/api/user", async (req, res) => {
 
         
         const { city, region, country } = ipDetails;
-        return res.status(201).json( {city,region,country} );
+        // return res.status(201).json( {city,region,country} );
 
-        // const geoResponse = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
-        //     params: {
-        //         q: `${city},${region},${country}`,
-        //         limit: 1,
-        //         appid: process.env.WEATHER_API_KEY
-        //     }
-        // });
+        const geoResponse = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
+            params: {
+                q: `${city},${region},${country}`,
+                limit: 1,
+                appid: process.env.WEATHER_API_KEY
+            }
+        });
+
+        return res.status(201).json({geoResponse});
 
         // if (!geoResponse.data.length) {
         //     return res.status(400).json({ msg: 'Unable to fetch location data.' });
