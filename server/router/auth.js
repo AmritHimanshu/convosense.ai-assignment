@@ -35,16 +35,9 @@ router.post("/api/user", async (req, res) => {
         const ipDetails = await getIPDetails(ip);
         console.log(ipDetails);
 
-        return res.status(201).json({ message: ipDetails });
+        return res.status(201).json({ ipDetails });
 
-        // const clientIp = requestIp.getClientIp(req);
-        // console.log("ip: ", clientIp)
-
-        // const ipApiUrl = `https://ipapi.co/${clientIp}/json/`;
-
-        // const locationResponse = await axios.get(ipApiUrl);
-
-        // const { city, region, country_name: country } = locationResponse.data;
+        // const { city, region, country_name: country } = ipDetails;
 
         // const geoResponse = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
         //     params: {
