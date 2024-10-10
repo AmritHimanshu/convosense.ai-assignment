@@ -35,6 +35,8 @@ router.post("/api/user", async (req, res) => {
         const ipDetails = await getIPDetails(ip);
         console.log(ipDetails);
 
+        return res.status(201).json({ message: ipDetails });
+
         // const clientIp = requestIp.getClientIp(req);
         // console.log("ip: ", clientIp)
 
@@ -103,7 +105,7 @@ router.post("/api/user", async (req, res) => {
         // const userRegistered = await user.save();
 
         // if (userRegistered) {
-            return res.status(201).json({ message: "User registered successfully" });
+            // return res.status(201).json({ message: "User registered successfully" });
         // }
     } catch (error) {
         console.log("/adduser: ", error);
