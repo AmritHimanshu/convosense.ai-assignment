@@ -37,7 +37,7 @@ router.post("/api/user", async (req, res) => {
 
         
         const { city, region, country } = ipDetails;
-        return res.status(201).json( city,region,country );
+        return res.status(201).json( {city,region,country} );
 
         // const geoResponse = await axios.get(`http://api.openweathermap.org/geo/1.0/direct`, {
         //     params: {
