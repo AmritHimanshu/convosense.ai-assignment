@@ -5,9 +5,19 @@ const requestIp = require('request-ip');
 const User = require("../model/userSchema");
 
 
-// const getClientIP = (req) => {
-//     return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-// };
+const getClientIP = (req) => {
+    return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+};
+
+const getIPDetails = async (ip) => {
+    try {
+        const response = await axios.get(`https://ipinfo.io/${ip}/json?token=${process.env.IPINFO_API_KEY}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching IP details:', error);
+        return null;
+    }
+};
 
 router.post("/api/user", async (req, res) => {
     const { name, age, gender, phone, email } = req.body;
@@ -15,6 +25,16 @@ router.post("/api/user", async (req, res) => {
         return res.status(422).json({ error: "Fill all the fields" });
     }
     try {
+        let ip = getClientIP(req);
+        console.log("ip: ",ip);
+
+        // if (ip === '::1' || ip === '127.0.0.1') {
+        //     return res.json({ message: 'Localhost IP detected', ip });
+        // }
+    
+        const ipDetails = await getIPDetails(ip);
+        console.log(ipDetails);
+
         // const clientIp = requestIp.getClientIp(req);
         // console.log("ip: ", clientIp)
 
@@ -66,25 +86,25 @@ router.post("/api/user", async (req, res) => {
         //     condition
         // };
 
-        const address = {
-            city: "Patna",
-            region: "Bihar",
-            country: "India",
-            latitude: 456789,
-            longitude: 456789,
-        };
+        // const address = {
+        //     city: "Patna",
+        //     region: "Bihar",
+        //     country: "India",
+        //     latitude: 456789,
+        //     longitude: 456789,
+        // };
 
-        const weather = {
-            temperature: 37,
-            condition: "Sunny",
-        };
+        // const weather = {
+        //     temperature: 37,
+        //     condition: "Sunny",
+        // };
 
-        const user = new User({ name, age, gender, phone, email, address, weather });
-        const userRegistered = await user.save();
+        // const user = new User({ name, age, gender, phone, email, address, weather });
+        // const userRegistered = await user.save();
 
-        if (userRegistered) {
+        // if (userRegistered) {
             return res.status(201).json({ message: "User registered successfully" });
-        }
+        // }
     } catch (error) {
         console.log("/adduser: ", error);
         return res.status(501).json({ error: "Internal server error" });

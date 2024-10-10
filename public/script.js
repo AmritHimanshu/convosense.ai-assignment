@@ -1,4 +1,5 @@
-const BASEURL = 'https://convosense-ai-assignment.vercel.app/api';
+// const BASEURL = 'https://convosense-ai-assignment.vercel.app/api';
+const BASEURL = 'http://localhost:5000/api';
 
 document.addEventListener('DOMContentLoaded', () => {
 
