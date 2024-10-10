@@ -24,6 +24,10 @@ app.use(require('./router/auth'));
 //     res.sendFile(path.join(__dirname, 'public/index.html'));
 // });
 
+app.get("/", (req, res) => {
+    res.json({ message: "I am from app" });
+});
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running at port ${PORT}`);
 });
